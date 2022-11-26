@@ -25,7 +25,7 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
     protected void configure(HttpSecurity http) throws Exception {
         super.configure(http);
         http.authorizeRequests().antMatchers("/api/deslogado").permitAll().antMatchers("/test/user")
-                .hasAnyRole("user").antMatchers("/test/admin").hasAnyRole("admin")
+                .hasAnyRole("user").antMatchers("/api/admin").hasAnyRole("admin")
                 .antMatchers("/test/all-user").hasAnyRole("user", "admin").anyRequest().permitAll();
         http.csrf().disable();
     }
@@ -40,6 +40,7 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
     @Bean
     @Override
     protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
+
         return new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl());
     }
 
@@ -47,4 +48,5 @@ public class KeycloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
     public KeycloakConfigResolver KeycloakConfigResolver() {
         return new KeycloakSpringBootConfigResolver();
     }
+
 }
