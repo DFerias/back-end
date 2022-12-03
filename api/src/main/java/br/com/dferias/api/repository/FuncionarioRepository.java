@@ -9,4 +9,6 @@ import br.com.dferias.api.model.Funcionario;
 @Repository
 @Component
 public interface FuncionarioRepository extends CrudRepository<Funcionario, Long> {
+
+    Funcionario findByEmail(String email);
 }

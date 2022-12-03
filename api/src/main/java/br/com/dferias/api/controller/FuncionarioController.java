@@ -3,19 +3,19 @@ package br.com.dferias.api.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.security.RolesAllowed;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import br.com.dferias.api.model.Funcionario;
 import br.com.dferias.api.repository.FuncionarioRepository;
 
 @Controller
+@RestController
 @RequestMapping("/api")
 public class FuncionarioController {
     @Autowired
@@ -37,7 +37,6 @@ public class FuncionarioController {
         }
     }
 
-    @RolesAllowed("admin")
     @GetMapping("/admin")
     public ResponseEntity<List<Funcionario>> getAllAdmin() {
         try {
