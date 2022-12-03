@@ -16,7 +16,7 @@ import br.com.dferias.api.model.DTO.TokenDTO;
 import br.com.dferias.api.service.TokenService;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthenticationController {
 
     @Autowired
