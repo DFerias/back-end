@@ -19,7 +19,7 @@ public class FuncionarioService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public int saveDto(FuncionarioDTO funcionarioDTO) {
+    public Long saveDto(FuncionarioDTO funcionarioDTO) {
 
         funcionarioDTO.setSenha(bCryptPasswordEncoder().encode(funcionarioDTO.getSenha()));
 

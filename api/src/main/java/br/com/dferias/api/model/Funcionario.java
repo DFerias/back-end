@@ -42,8 +42,8 @@ public class Funcionario implements UserDetails {
     }
 
     @Id
-    private Integer id;
-    private int idEquipe;
+    private Long id;
+    private Long idEquipe;
     private String nome;
     private Date dataAdmissao;
     private String email;
