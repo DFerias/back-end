@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,7 +22,7 @@ public class FuncionarioController {
     @Autowired
     private FuncionarioRepository repository;
 
-    @GetMapping("/user")
+    @PostMapping("/user")
     public ResponseEntity<List<Funcionario>> getAll() {
         try {
             List<Funcionario> items = new ArrayList<Funcionario>();

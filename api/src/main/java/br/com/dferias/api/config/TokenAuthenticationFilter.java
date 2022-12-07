@@ -11,18 +11,16 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import br.com.dferias.api.model.Funcionario;
-import br.com.dferias.api.repository.FuncionarioRepository;
 import br.com.dferias.api.service.TokenService;
 
+@Service
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
-
-    private TokenService tokenService = new TokenService();
-
     @Autowired
-    private FuncionarioRepository repository;
+    private TokenService tokenService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -33,8 +31,9 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         try {
 
             tokenValid = tokenService.isTokenValid(tokenFromHeader);
+            System.out.println(tokenValid);
         } catch (Exception e) {
-
+            System.out.println("Token invalido: " + e);
         }
         if (tokenValid) {
             this.authenticate(tokenFromHeader);
@@ -46,7 +45,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     private void authenticate(String tokenFromHeader) {
         Long id = Integer.toUnsignedLong(tokenService.getTokenId(tokenFromHeader));
 
-        Optional<Funcionario> optionalUser = repository.findById(id);
+        Optional<Funcionario> optionalUser = tokenService.findById(id);
 
         if (optionalUser.isPresent()) {
 
@@ -61,10 +60,12 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     private String getTokenFromHeader(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         if (token == null || token.isEmpty() || !token.startsWith("Bearer ")) {
+            System.out.println("invalid token");
             return null;
         }
-
-        return token.substring(7, token.length());
+        token = token.substring(7, token.length());
+        System.out.println(token);
+        return token;
     }
 
 }
