@@ -38,7 +38,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers(HttpMethod.POST, "/api/auth").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/*").hasAuthority("funcionario")
+                .antMatchers(HttpMethod.POST, "/api/user").hasAuthority("funcionario")
+                .antMatchers(HttpMethod.POST,"/api/new").permitAll()
+                
                 .anyRequest().authenticated()
                 .and().csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)

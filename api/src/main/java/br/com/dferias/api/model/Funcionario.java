@@ -6,19 +6,24 @@ import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import br.com.dferias.api.model.DTO.FuncionarioDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -34,7 +39,7 @@ public class Funcionario implements UserDetails {
         this.dataAdmissao = funcionarioDTO.getDataAdmissao();
         this.email = funcionarioDTO.getEmail();
         this.saldoFerias = 0;
-        this.pass = funcionarioDTO.getSenha();
+        this.pass = new BCryptPasswordEncoder().encode( funcionarioDTO.getPass());
         this.modalidade = funcionarioDTO.getModalidade();
         this.cidade = funcionarioDTO.getCidade();
         this.uf = funcionarioDTO.getUf();
@@ -59,6 +64,7 @@ public class Funcionario implements UserDetails {
     }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long idEquipe;
     private String nome;

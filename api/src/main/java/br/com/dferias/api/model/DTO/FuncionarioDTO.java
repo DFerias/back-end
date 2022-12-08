@@ -31,7 +31,7 @@ public class FuncionarioDTO {
     private String nome;
     private Date dataAdmissao;
     private String email;
-    private String senha;
+    private String pass;
     private String modalidade;
     private String cidade;
     private String uf;

@@ -25,7 +25,7 @@ public class FuncionarioService {
     @Transactional(rollbackFor = Exception.class)
     public Long saveDto(FuncionarioDTO funcionarioDTO) {
 
-        funcionarioDTO.setSenha(bCryptPasswordEncoder().encode(funcionarioDTO.getSenha()));
+        funcionarioDTO.setPass(bCryptPasswordEncoder().encode(funcionarioDTO.getPass()));
 
         return save(new Funcionario(funcionarioDTO)).getId();
     }
@@ -36,7 +36,7 @@ public class FuncionarioService {
 
     public void createFuncionario(Funcionario funcionario) {
         System.out.println(funcionario);
-
+        repository.save(funcionario);
     }
 
     public Optional<Funcionario> findById(Long id) {
