@@ -41,6 +41,23 @@ public class Funcionario implements UserDetails {
 
     }
 
+    @Override
+    public String toString() {
+        return "{" +
+                " id='" + getId() + "'" +
+                ", idEquipe='" + getIdEquipe() + "'" +
+                ", nome='" + getNome() + "'" +
+                ", dataAdmissao='" + getDataAdmissao() + "'" +
+                ", email='" + getEmail() + "'" +
+                ", saldoFerias='" + getSaldoFerias() + "'" +
+                ", pass='" + getPass() + "'" +
+                ", modalidade='" + getModalidade() + "'" +
+                ", cidade='" + getCidade() + "'" +
+                ", uf='" + getUf() + "'" +
+                ", perfis='" + getPerfis() + "'" +
+                "}";
+    }
+
     @Id
     private Long id;
     private Long idEquipe;

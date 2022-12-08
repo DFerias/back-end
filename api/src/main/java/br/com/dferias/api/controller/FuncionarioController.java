@@ -13,17 +13,24 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.dferias.api.model.Funcionario;
+import br.com.dferias.api.model.DTO.FuncionarioDTO;
 import br.com.dferias.api.repository.FuncionarioRepository;
+import br.com.dferias.api.service.FuncionarioService;
 
 @Controller
 @RestController
 @RequestMapping("/api")
 public class FuncionarioController {
+
     @Autowired
     private FuncionarioRepository repository;
 
-    @PostMapping("/user")
+    @Autowired
+    private FuncionarioService funcionarioService;
+
+    @GetMapping("/user")
     public ResponseEntity<List<Funcionario>> getAll() {
+        System.out.println("REMOVA ESSE METODO");
         try {
             List<Funcionario> items = new ArrayList<Funcionario>();
             System.out.println("buscando");
@@ -32,18 +39,27 @@ public class FuncionarioController {
             if (items.isEmpty())
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
-            return new ResponseEntity<>(items, HttpStatus.OK);
+            return new ResponseEntity<>(items, HttpStatus.I_AM_A_TEAPOT);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
+    @PostMapping("/new")
+    public ResponseEntity.BodyBuilder createUser(Funcionario funcionario) {
+        funcionarioService.createFuncionario(funcionario);
+        return ResponseEntity.ok();
+    }
+
     @GetMapping("/admin")
-    public ResponseEntity<List<Funcionario>> getAllAdmin() {
+    public ResponseEntity<List<FuncionarioDTO>> getAllAdmin() {
         try {
-            List<Funcionario> items = new ArrayList<Funcionario>();
+            List<FuncionarioDTO> items = new ArrayList<FuncionarioDTO>();
             System.out.println("buscando");
-            repository.findAll().forEach(items::add);
+
+            for (Funcionario funcionario : repository.findAll()) {
+                items.add(new FuncionarioDTO(funcionario));
+            }
 
             if (items.isEmpty())
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);

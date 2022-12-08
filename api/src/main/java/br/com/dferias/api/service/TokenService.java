@@ -20,7 +20,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 public class TokenService {
 
     @Autowired
-    private FuncionarioRepository repository;
+    private FuncionarioService funcionarioService;
 
     @Value("${jwt.expiration}")
     private String expiration;
@@ -58,7 +58,7 @@ public class TokenService {
     }
 
     public Optional<Funcionario> findById(Long id) {
-        return repository.findById(id);
+        return funcionarioService.findById(id);
     }
 
 }
