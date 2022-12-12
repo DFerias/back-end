@@ -15,7 +15,10 @@ import br.com.dferias.api.repository.FuncionarioRepository;
 @Service
 public class FuncionarioService {
     @Autowired
-    FuncionarioRepository repository;
+    private  FuncionarioRepository repository;
+    @Autowired
+    private PerfilService perfilService;
+
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -27,16 +30,19 @@ public class FuncionarioService {
 
         funcionarioDTO.setPass(bCryptPasswordEncoder().encode(funcionarioDTO.getPass()));
 
-        return save(new Funcionario(funcionarioDTO)).getId();
+        return cadastrar(new Funcionario(funcionarioDTO)).getId();
     }
 
-    private Funcionario save(Funcionario funcionario) {
-        return repository.save(funcionario);
+    private Funcionario cadastrar(Funcionario funcionario) {
+        Funcionario funcionarioCriado;
+        funcionarioCriado = repository.save(funcionario);
+        System.out.println("Funcionario criado"+funcionarioCriado);
+        perfilService.vincularNovoPerfil(funcionarioCriado.getId());
+        return funcionarioCriado;
     }
 
     public void createFuncionario(Funcionario funcionario) {
-        System.out.println(funcionario);
-        repository.save(funcionario);
+        cadastrar(funcionario);
     }
 
     public Optional<Funcionario> findById(Long id) {

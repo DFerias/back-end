@@ -31,9 +31,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         try {
 
             tokenValid = tokenService.isTokenValid(tokenFromHeader);
-            System.out.println(tokenValid);
         } catch (Exception e) {
-            System.out.println("Token invalido: " + e);
         }
         if (tokenValid) {
             this.authenticate(tokenFromHeader);
@@ -60,11 +58,9 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     private String getTokenFromHeader(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         if (token == null || token.isEmpty() || !token.startsWith("Bearer ")) {
-            System.out.println("invalid token");
             return null;
         }
         token = token.substring(7, token.length());
-        System.out.println(token);
         return token;
     }
 
