@@ -1,5 +1,7 @@
 package br.com.dferias.api.config;
 
+import br.com.dferias.api.service.AuthenticationService;
+import br.com.dferias.api.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,50 +15,61 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import br.com.dferias.api.service.AuthenticationService;
-import br.com.dferias.api.service.TokenService;
-
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    private AuthenticationService authenticationService;
-    @Autowired
-    private TokenAuthenticationFilter tokenAuthenticationFilter;
+  @Autowired
+  private AuthenticationService authenticationService;
 
-    @Autowired
-    private TokenService tokenService;
+  @Autowired
+  private TokenAuthenticationFilter tokenAuthenticationFilter;
 
-    // Configurations for authentication
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(authenticationService).passwordEncoder(new BCryptPasswordEncoder());
-    }
+  @Autowired
+  private TokenService tokenService;
 
-    // Configuration for authorization
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/api/auth").permitAll()
-                .antMatchers(HttpMethod.POST, "/api/user").hasAuthority("funcionario")
-                .antMatchers(HttpMethod.POST,"/api/new").permitAll()
-                
-                .anyRequest().authenticated()
-                .and().csrf().disable()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                // Configuração do Filtro
-                .and().addFilterBefore(tokenAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
-    }
+  // Configurations for authentication
+  @Override
+  protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    auth
+      .userDetailsService(authenticationService)
+      .passwordEncoder(new BCryptPasswordEncoder());
+  }
 
-    // Configuration for static resources
-    @Override
-    public void configure(WebSecurity web) throws Exception {
-    }
+  // Configuration for authorization
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http
+      .authorizeRequests()
+      .antMatchers(HttpMethod.POST, "/api/auth")
+      .permitAll()
+      .antMatchers(HttpMethod.POST, "/api/user")
+      .hasAuthority("funcionario")
+      .antMatchers(HttpMethod.POST, "/api/new")
+      .permitAll()
+      .antMatchers(HttpMethod.POST, "/api/equipe/**")
+      .hasAuthority("RH")
+      .anyRequest()
+      .authenticated()
+      .and()
+      .csrf()
+      .disable()
+      .sessionManagement()
+      .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+      // Configuração do Filtro
+      .and()
+      .addFilterBefore(
+        tokenAuthenticationFilter,
+        UsernamePasswordAuthenticationFilter.class
+      );
+  }
 
-    @Override
-    @Bean
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
+  // Configuration for static resources
+  @Override
+  public void configure(WebSecurity web) throws Exception {}
 
+  @Override
+  @Bean
+  public AuthenticationManager authenticationManagerBean() throws Exception {
+    return super.authenticationManagerBean();
+  }
 }

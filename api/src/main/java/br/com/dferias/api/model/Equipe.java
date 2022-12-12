@@ -7,19 +7,19 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
-@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
 @Getter
-@ToString
-@Table(name = "funcionario_perfis")
-public class FuncionarioPerfis {
+@Entity
+@Table
+public class Equipe {
 
   @Id
-  private int funcionario_id;
+  private Long id;
 
-  private int perfis_id;
+  private Long id_lider;
+  private String nome;
+  private String cor;
 }
