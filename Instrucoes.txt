@@ -1,0 +1,17 @@
+Para rodar a aplicação, após criar o banco com o arquivo mysql.sql, 
+
+execute o comando:
+ sudo docker compose up --build
+
+ou no windows:
+ docker compose up --build
+ 
+esse container roda na mesma rede do host (sem um ip separado), 
+portanto as portas que o container usa (8000) deve estar livre no host
+é necessario essa abordagem para que seja possivel conectar no banco local, 
+caso fossem redes separadas, seria necessario
+criar outro container contendo o banco de dados.
+
+
+
+
