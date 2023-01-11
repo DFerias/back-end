@@ -25,11 +25,12 @@ public class EquipeController {
   @GetMapping
   public ResponseEntity<List<Equipe>> getAll() {
     try {
-      List<Equipe> items = new ArrayList<Equipe>();
+      List<Equipe> items = new ArrayList<>();
 
       repository.findAll().forEach(items::add);
 
-      if (items.isEmpty()) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+      if (items.isEmpty())
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
       return new ResponseEntity<>(items, HttpStatus.OK);
     } catch (Exception e) {
