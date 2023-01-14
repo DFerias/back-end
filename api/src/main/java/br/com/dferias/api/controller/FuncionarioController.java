@@ -44,7 +44,7 @@ public class FuncionarioController {
     }
   }
 
-  @PostMapping("/new")
+  @PostMapping("user/new")
   @ResponseBody
   public Object createUser(@RequestBody FuncionarioDTO funcionario) {
     funcionarioService.createFuncionario(new Funcionario(funcionario));

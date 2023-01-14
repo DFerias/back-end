@@ -31,43 +31,45 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(AuthenticationManagerBuilder auth) throws Exception {
     auth
-        .userDetailsService(authenticationService)
-        .passwordEncoder(new BCryptPasswordEncoder());
+      .userDetailsService(authenticationService)
+      .passwordEncoder(new BCryptPasswordEncoder());
   }
 
   // Configuration for authorization
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     http
-        .authorizeRequests()
-        .antMatchers(HttpMethod.POST, "/api/auth")
-        .permitAll()
-        .antMatchers(HttpMethod.POST, "/api/user")
-        .hasAuthority("funcionario")
-        .antMatchers(HttpMethod.POST, "/api/new")
-        .permitAll()
-        .antMatchers(HttpMethod.GET, "/api/equipe")
-        .authenticated()
-        .antMatchers(HttpMethod.POST, "/api/equipe/**")
-        .hasAuthority("RH")
-        .anyRequest()
-        .authenticated()
-        .and()
-        .csrf()
-        .disable()
-        .sessionManagement()
-        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        // Configuração do Filtro
-        .and()
-        .addFilterBefore(
-            tokenAuthenticationFilter,
-            UsernamePasswordAuthenticationFilter.class);
+      .authorizeRequests()
+      .antMatchers(HttpMethod.POST, "/api/auth")
+      .permitAll()
+      .antMatchers(HttpMethod.POST, "/api/user")
+      .hasAuthority("funcionario")
+      .antMatchers(HttpMethod.POST, "/api/new")
+      .permitAll()
+      .antMatchers(HttpMethod.GET, "/api/equipe")
+      .authenticated()
+      .antMatchers(HttpMethod.GET, "/api/ferias")
+      .authenticated()
+      .antMatchers(HttpMethod.POST, "/api/equipe/**")
+      .hasAuthority("RH")
+      .anyRequest()
+      .authenticated()
+      .and()
+      .csrf()
+      .disable()
+      .sessionManagement()
+      .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+      // Configuração do Filtro
+      .and()
+      .addFilterBefore(
+        tokenAuthenticationFilter,
+        UsernamePasswordAuthenticationFilter.class
+      );
   }
 
   // Configuration for static resources
   @Override
-  public void configure(WebSecurity web) throws Exception {
-  }
+  public void configure(WebSecurity web) throws Exception {}
 
   @Override
   @Bean

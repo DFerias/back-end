@@ -9,6 +9,7 @@ import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.Setter;
 
 @Entity
@@ -23,10 +24,15 @@ public class Ferias {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @NonNull
   private Long idFuncionario;
+
   private Long idRh;
 
+  @NonNull
   private Date inicio;
+
+  @NonNull
   private Date fim;
 
   private String status;
