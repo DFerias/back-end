@@ -28,6 +28,7 @@ public class Ferias {
   private Long idFuncionario;
 
   private Long idRh;
+  private Long idLider;
 
   @NonNull
   private Date inicio;

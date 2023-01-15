@@ -1,7 +1,9 @@
 package br.com.dferias.api.service;
 
 import br.com.dferias.api.model.DTO.FuncionarioDTO;
+import br.com.dferias.api.model.Equipe;
 import br.com.dferias.api.model.Funcionario;
+import br.com.dferias.api.repository.EquipeRepository;
 import br.com.dferias.api.repository.FuncionarioRepository;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,9 @@ public class FuncionarioService {
   @Autowired
   private PerfilService perfilService;
 
+  @Autowired
+  private EquipeRepository equipeRepository;
+
   @Bean
   public BCryptPasswordEncoder bCryptPasswordEncoder() {
     return new BCryptPasswordEncoder();
@@ -31,6 +36,17 @@ public class FuncionarioService {
     );
 
     return cadastrar(new Funcionario(funcionarioDTO)).getId();
+  }
+
+  public Long getLiderId(Funcionario funcionario) {
+    Equipe equipe =
+      this.equipeRepository.findById(funcionario.getIdEquipe()).get();
+
+    return equipe.getId_lider();
+  }
+
+  public Funcionario getById(Long id) {
+    return this.repository.findById(id).get();
   }
 
   private Funcionario cadastrar(Funcionario funcionario) {
