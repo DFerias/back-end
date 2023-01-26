@@ -2,7 +2,6 @@ package br.com.dferias.api.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,12 +10,14 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.dferias.api.model.Funcionario;
 import br.com.dferias.api.model.DTO.LoginDTO;
+import br.com.dferias.api.model.DTO.LoginFuncionarioDTO;
 import br.com.dferias.api.model.DTO.TokenDTO;
+import br.com.dferias.api.service.FuncionarioService;
 import br.com.dferias.api.service.TokenService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -34,8 +35,11 @@ public class AuthenticationController {
   @Autowired
   private TokenService tokenService;
 
+  @Autowired
+  private FuncionarioService funcionarioService;
+
   @PostMapping
-  public ResponseEntity<TokenDTO> auth(
+  public ResponseEntity<LoginFuncionarioDTO> auth(
       @RequestBody @Validated LoginDTO loginDTO) {
     System.out.println("Logando");
     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
@@ -46,8 +50,16 @@ public class AuthenticationController {
         usernamePasswordAuthenticationToken);
 
     String token = tokenService.generateToken(authentication);
+    Claims claims = Jwts.parser().setSigningKey(this.senhaSecreta).parseClaimsJws(token).getBody();
+    Long id = Long.parseLong(claims.getSubject());
+    System.out.println(id);
+    token = "Bearer " + token;
 
-    return ResponseEntity.ok(new TokenDTO("Bearer", token));
+    Funcionario funcionario = funcionarioService.getById(id);
+
+    LoginFuncionarioDTO dados = new LoginFuncionarioDTO(token, funcionario);
+
+    return ResponseEntity.ok(dados);
   }
 
   @GetMapping("/id")
