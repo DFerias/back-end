@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,19 +29,16 @@ public class FuncionarioController {
   @Autowired
   private FuncionarioService funcionarioService;
 
-  @GetMapping("/user")
-  public ResponseEntity<List<Funcionario>> getAll() {
-    System.out.println("REMOVA ESSE METODO");
+  @GetMapping("/user/{id}")
+  public ResponseEntity<Funcionario> getAll(@PathVariable Long id) {
+
     try {
       List<Funcionario> items = new ArrayList<Funcionario>();
-      System.out.println("buscando");
-      repository.findAll().forEach(items::add);
+      Funcionario funcionario = repository.findById(id).get();
 
-      if (items.isEmpty()) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-
-      return new ResponseEntity<>(items, HttpStatus.I_AM_A_TEAPOT);
+      return new ResponseEntity<>(funcionario, HttpStatus.OK);
     } catch (Exception e) {
-      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+      return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
   }
 
@@ -54,14 +52,15 @@ public class FuncionarioController {
   @GetMapping("/admin")
   public ResponseEntity<List<FuncionarioDTO>> getAllAdmin() {
     try {
-      List<FuncionarioDTO> items = new ArrayList<FuncionarioDTO>();
+      List<FuncionarioDTO> items = new ArrayList<>();
       System.out.println("buscando");
 
       for (Funcionario funcionario : repository.findAll()) {
         items.add(new FuncionarioDTO(funcionario));
       }
 
-      if (items.isEmpty()) return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+      if (items.isEmpty())
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
       return new ResponseEntity<>(items, HttpStatus.OK);
     } catch (Exception e) {
