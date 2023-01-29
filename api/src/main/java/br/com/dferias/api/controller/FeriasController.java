@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.server.NotAcceptableStatusException;
 
 import br.com.dferias.api.model.Ferias;
 import br.com.dferias.api.model.Funcionario;
@@ -128,6 +130,25 @@ public class FeriasController {
 
       return new ResponseEntity<>(feriasList, HttpStatus.NOT_FOUND);
     }
+  }
+
+  @PostMapping("/ferias/{id}/{status}")
+  public ResponseEntity<String> update(@PathVariable Long id, @PathVariable String status) {
+    try {
+
+      feriasService.atualizarStatus(id, status);
+      return new ResponseEntity<>("ok", HttpStatus.OK);
+    } catch (NotAcceptableStatusException ex) {
+      return new ResponseEntity<>("Status nao suportado\n" + ex.getMessage(), HttpStatus.BAD_REQUEST);
+
+    } catch (NotFoundException e) {
+      return new ResponseEntity<>("ID nao encontrado",
+          HttpStatus.NOT_FOUND);
+    } catch (Exception e) {
+      return new ResponseEntity<>("Erro ao atualizar " + e.getMessage(),
+          HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
   }
 
 }
