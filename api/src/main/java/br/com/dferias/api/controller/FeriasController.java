@@ -55,12 +55,12 @@ public class FeriasController {
 
       for (Ferias ferias : feriasList) {
         Funcionario funcionario = funcionarioService.getById(ferias.getIdFuncionario());
-
+        System.out.println(funcionario.getNome());
         feriasFuncionario.add(new FeriasFuncionarioDTO(funcionario, ferias));
       }
       return new ResponseEntity<>(feriasFuncionario, HttpStatus.OK);
     } catch (Exception e) {
-
+      System.out.println(e);
       return new ResponseEntity<>(feriasFuncionario, HttpStatus.NOT_FOUND);
     }
   }
