@@ -32,15 +32,13 @@ public class FuncionarioService {
   @Transactional(rollbackFor = Exception.class)
   public Long saveDto(FuncionarioDTO funcionarioDTO) {
     funcionarioDTO.setPass(
-      bCryptPasswordEncoder().encode(funcionarioDTO.getPass())
-    );
+        bCryptPasswordEncoder().encode(funcionarioDTO.getPass()));
 
     return cadastrar(new Funcionario(funcionarioDTO)).getId();
   }
 
   public Long getLiderId(Funcionario funcionario) {
-    Equipe equipe =
-      this.equipeRepository.findById(funcionario.getIdEquipe()).get();
+    Equipe equipe = this.equipeRepository.findById(funcionario.getIdEquipe()).get();
 
     return equipe.getId_lider();
   }
@@ -54,6 +52,7 @@ public class FuncionarioService {
     funcionarioCriado = repository.save(funcionario);
     System.out.println("Funcionario criado" + funcionarioCriado);
     perfilService.vincularNovoPerfil(funcionarioCriado.getId());
+
     return funcionarioCriado;
   }
 
