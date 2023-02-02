@@ -1,0 +1,4 @@
+FROM openjdk:17
+COPY . /app
+WORKDIR /app
+CMD ["java", "-jar", "api-0.0.1-SNAPSHOT.jar"]
