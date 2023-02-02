@@ -1,4 +1,4 @@
--- MySQL dump 10.13  Distrib 8.0.31, for Linux (x86_64)
+  -- MySQL dump 10.13  Distrib 8.0.31, for Linux (x86_64)
 --
 -- Host: localhost    Database: dferias
 -- ------------------------------------------------------
@@ -28,7 +28,7 @@ CREATE TABLE `equipe` (
   `nome` varchar(50) NOT NULL DEFAULT '',
   `cor` varchar(10) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -59,7 +59,7 @@ CREATE TABLE `ferias` (
   `observacoes_rh` varchar(255) DEFAULT NULL,
   `status` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -85,7 +85,7 @@ CREATE TABLE `funcionario` (
   `email` varchar(100) NOT NULL,
   `data_admissao` date NOT NULL,
   `saldo_de_ferias` int NOT NULL DEFAULT '0',
-  `pass` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '0',
+  `pass` varchar(100) CHARACTER SET utf8mb4  NOT NULL DEFAULT '0',
   `id_equipe` int DEFAULT '0',
   `cidade` varchar(100) NOT NULL DEFAULT '0',
   `modalidade` varchar(255) DEFAULT NULL,
@@ -95,7 +95,7 @@ CREATE TABLE `funcionario` (
   UNIQUE KEY `funcionario_pk` (`email`),
   KEY `FK_funcionario_equipe` (`id_equipe`),
   CONSTRAINT `FK_funcionario_equipe` FOREIGN KEY (`id_equipe`) REFERENCES `equipe` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -122,7 +122,7 @@ CREATE TABLE `funcionario_perfis` (
   KEY `FKtay4xgsw3ngb29uxwtj7w0o0` (`perfis_id`),
   CONSTRAINT `FKtay4xgsw3ngb29uxwtj7w0o0` FOREIGN KEY (`perfis_id`) REFERENCES `perfil` (`id`),
   CONSTRAINT `FKtrmbhcnmjioqkr1xs9n9byfml` FOREIGN KEY (`funcionario_id`) REFERENCES `funcionario` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -146,7 +146,7 @@ CREATE TABLE `perfil` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 ;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

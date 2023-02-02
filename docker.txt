@@ -1,0 +1,14 @@
+# Criar uma rede compartilhada
+docker network create shared_network
+
+# Construir a imagem da API Java a partir do Dockerfile
+docker build -t java-api .
+
+# Executar o container da API Java
+docker run -it --network shared_network --name java-api java-api
+
+# Construir a imagem do MySQL a partir do Dockerfile
+docker build -f Dockerfile-mysql -t mysql-db .
+
+# Executar o container do MySQL com um volume para persistir os dados
+docker run -it --network shared_network --name mysql-db -v mysql-data:/var/lib/mysql mysql-db
