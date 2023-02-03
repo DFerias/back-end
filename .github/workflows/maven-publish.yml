@@ -19,7 +19,8 @@ jobs:
         java-version: 11
 
     - name: Build with Maven
-      run: mvn -B clean install
+      run: /api/mvnw package -f /api/pom.xml
+#       run: mvn -B clean install
 
     - name: Publish to Maven repository
       uses: actions/publish-to-maven-central@v1
