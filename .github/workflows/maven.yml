@@ -4,7 +4,7 @@ name: Java Workflow Example - Build, Test and Deploy
 on:
   push:
     branches:
-      - master
+      - teste
 
 jobs:
   # `build` é o nome do job
