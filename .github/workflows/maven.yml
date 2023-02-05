@@ -1,0 +1,59 @@
+name: Java Workflow Example - Build, Test and Deploy
+
+# configuramos para rodar apenas quando houver um push na master
+on:
+  push:
+    branches:
+      - teste
+
+jobs:
+  # `build` é o nome do job
+  build:
+    # nome para exibir no repositório
+    name: Build, Test and Deploy
+    
+
+    # utilizamos uma instância do ubuntu como runner
+    runs-on: ubuntu-latest
+
+    steps:
+      # utilizamos a action checkout para fazer o git clone no runner
+      - uses: actions/checkout@v2
+
+      # utilizamos a action setup-java para configurar a versão necessária do JDK
+      - name: Set up JDK 11
+        
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: 11
+          architecture: x64
+
+      # aqui podemos configurar um cache para cachear as dependências do projeto,
+      # isso vai permitir que as próximas execuções do workflow sejam mais rápidas
+      # visto que as dependências já estarão disponibilizadas para o runner
+      # nota: utilizamos um hash do arquivo POM.xml, então quando o alterarmos,
+      # as dependências são baixadas novamente
+      - name: Cache Maven packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+
+      # fazemos construção e publicação do artefato construído
+      - name: Maven Build and Publish
+        working-directory: ./api
+        run: mvn -B deploy
+        env:
+          # com estamos utilizado o Github Artifact, passamos o token do repositório para fazer upload
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # copiamos o artefato construído para uma pasta específica
+      - run: mkdir dist && cp target/*.jar dist
+
+      # aqui fazemos o publicação do artefato para que possa ser baixado nos detalhes de execução do workflow
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Package
+          path: dist

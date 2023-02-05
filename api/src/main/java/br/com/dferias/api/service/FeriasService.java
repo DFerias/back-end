@@ -80,6 +80,11 @@ public class FeriasService {
       feriasRepository.updateFeriasStatus(status, id);
       return;
     }
-    throw new NotAcceptableStatusException("Status suportados: APROVADA, PENDENTE, RECUSADA, CONCLUIDA");
+    throw new NotAcceptableStatusException("Status suportados: APROVADA, VALIDADA, PENDENTE, RECUSADA, CONCLUIDA");
+  }
+
+  public List<Ferias> findByIdLider(Long id) {
+
+    return feriasRepository.findByIdLider(id);
   }
 }

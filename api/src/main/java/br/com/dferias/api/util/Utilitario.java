@@ -14,6 +14,7 @@ public class Utilitario {
         status = new ArrayList<>();
         status.clear();
         status.add("APROVADA");
+        status.add("VALIDADA");
         status.add("RECUSADA");
         status.add("PENDENTE");
         status.add("CONCLUIDA");

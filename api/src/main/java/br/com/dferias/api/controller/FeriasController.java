@@ -12,12 +12,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.NotAcceptableStatusException;
 
 import br.com.dferias.api.model.Ferias;
 import br.com.dferias.api.model.Funcionario;
 import br.com.dferias.api.model.DTO.FeriasFuncionarioDTO;
+import br.com.dferias.api.model.DTO.TokenDTO;
+import br.com.dferias.api.service.AuthenticationService;
 import br.com.dferias.api.service.FeriasService;
 import br.com.dferias.api.service.FuncionarioService;
 
@@ -27,6 +30,8 @@ public class FeriasController {
 
   @Autowired
   private FeriasService feriasService;
+  @Autowired
+  private AuthenticationService authService;
 
   @Autowired
   private FuncionarioService funcionarioService;
@@ -96,6 +101,31 @@ public class FeriasController {
     try {
 
       feriasList = feriasService.findByStatus(status);
+
+      if (feriasList.isEmpty()) {
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+      }
+
+      for (Ferias ferias : feriasList) {
+        Funcionario funcionario = funcionarioService.getById(ferias.getIdFuncionario());
+
+        feriasFuncionario.add(new FeriasFuncionarioDTO(funcionario, ferias));
+      }
+      return new ResponseEntity<>(feriasFuncionario, HttpStatus.OK);
+    } catch (Exception e) {
+
+      return new ResponseEntity<>(feriasFuncionario, HttpStatus.NOT_FOUND);
+    }
+  }
+
+  @GetMapping("/ferias/lider")
+  public ResponseEntity<List<FeriasFuncionarioDTO>> getByLider(@RequestHeader String authorization) {
+    List<Ferias> feriasList = new ArrayList<>();
+    List<FeriasFuncionarioDTO> feriasFuncionario = new ArrayList<>();
+    try {
+      authorization = authorization.replaceAll("Bearer ", "");
+      Long id = authService.getIdByToken(new TokenDTO("Bearer", authorization));
+      feriasList = feriasService.findByIdLider(id);
 
       if (feriasList.isEmpty()) {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
