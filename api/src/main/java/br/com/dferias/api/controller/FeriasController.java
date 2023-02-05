@@ -175,7 +175,7 @@ public class FeriasController {
       return new ResponseEntity<>("ID nao encontrado",
           HttpStatus.NOT_FOUND);
     } catch (Exception e) {
-      return new ResponseEntity<>("Erro ao atualizar " + e.getMessage(),
+      return new ResponseEntity<>("Erro  ao atualizar " + e.getMessage(),
           HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
