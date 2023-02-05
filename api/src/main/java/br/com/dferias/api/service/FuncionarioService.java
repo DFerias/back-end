@@ -1,16 +1,19 @@
 package br.com.dferias.api.service;
 
-import br.com.dferias.api.model.DTO.FuncionarioDTO;
-import br.com.dferias.api.model.Equipe;
-import br.com.dferias.api.model.Funcionario;
-import br.com.dferias.api.repository.EquipeRepository;
-import br.com.dferias.api.repository.FuncionarioRepository;
+import java.util.List;
 import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import br.com.dferias.api.model.Equipe;
+import br.com.dferias.api.model.Funcionario;
+import br.com.dferias.api.model.DTO.FuncionarioDTO;
+import br.com.dferias.api.repository.EquipeRepository;
+import br.com.dferias.api.repository.FuncionarioRepository;
 
 @Service
 public class FuncionarioService {
@@ -62,5 +65,17 @@ public class FuncionarioService {
 
   public Optional<Funcionario> findById(Long id) {
     return repository.findById(id);
+  }
+
+  public boolean isLider(Long id) {
+    List<Equipe> equipes = equipeRepository.findAll();
+
+    for (Equipe equipe : equipes) {
+      if (equipe.getId_lider().equals(id)) {
+        return true;
+      }
+    }
+    return false;
+
   }
 }

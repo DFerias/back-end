@@ -17,6 +17,7 @@ import br.com.dferias.api.model.Funcionario;
 import br.com.dferias.api.model.DTO.LoginDTO;
 import br.com.dferias.api.model.DTO.LoginFuncionarioDTO;
 import br.com.dferias.api.model.DTO.TokenDTO;
+import br.com.dferias.api.service.AuthenticationService;
 import br.com.dferias.api.service.FuncionarioService;
 import br.com.dferias.api.service.TokenService;
 import io.jsonwebtoken.Claims;
@@ -34,6 +35,8 @@ public class AuthenticationController {
 
   @Autowired
   private TokenService tokenService;
+  @Autowired
+  private AuthenticationService authenticationService;
 
   @Autowired
   private FuncionarioService funcionarioService;
@@ -41,7 +44,7 @@ public class AuthenticationController {
   @PostMapping
   public ResponseEntity<LoginFuncionarioDTO> auth(
       @RequestBody @Validated LoginDTO loginDTO) {
-    System.out.println("Logando");
+
     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
         loginDTO.getUser(),
         loginDTO.getPass());
@@ -52,27 +55,18 @@ public class AuthenticationController {
     String token = tokenService.generateToken(authentication);
     Claims claims = Jwts.parser().setSigningKey(this.senhaSecreta).parseClaimsJws(token).getBody();
     Long id = Long.parseLong(claims.getSubject());
-    System.out.println(id);
+
     token = "Bearer " + token;
 
     Funcionario funcionario = funcionarioService.getById(id);
-
-    LoginFuncionarioDTO dados = new LoginFuncionarioDTO(token, funcionario);
+    boolean isLider = funcionarioService.isLider(id);
+    LoginFuncionarioDTO dados = new LoginFuncionarioDTO(token, isLider, funcionario);
 
     return ResponseEntity.ok(dados);
   }
 
   @GetMapping("/id")
-  public Long getFuncionarioId(@RequestBody TokenDTO token) throws Exception {
-
-    try {
-      Claims claims = Jwts.parser().setSigningKey(this.senhaSecreta).parseClaimsJws(token.getToken()).getBody();
-      System.out.println(Long.parseLong(claims.getSubject()));
-      return Long.parseLong(claims.getSubject());
-    } catch (Exception e) {
-
-      return Long.parseLong("-1");
-    }
-
+  public Long getFuncionarioByToken(@RequestBody TokenDTO token) {
+    return authenticationService.getIdByToken(token);
   }
 }

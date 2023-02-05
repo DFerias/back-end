@@ -15,6 +15,8 @@ import br.com.dferias.api.model.Ferias;
 public interface FeriasRepository extends JpaRepository<Ferias, Long> {
     List<Ferias> findByIdFuncionario(Long idFuncionario);
 
+    List<Ferias> findByIdLider(Long id);
+
     @Query(value = "SELECT * FROM ferias  WHERE inicio > DATE_SUB(NOW(), INTERVAL 1 DAY) ORDER BY inicio ASC;", nativeQuery = true)
     List<Ferias> findAllNextFerias();
 

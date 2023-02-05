@@ -49,22 +49,4 @@ public class FuncionarioController {
     return ResponseEntity.ok().body("ok");
   }
 
-  @GetMapping("/admin")
-  public ResponseEntity<List<FuncionarioDTO>> getAllAdmin() {
-    try {
-      List<FuncionarioDTO> items = new ArrayList<>();
-      System.out.println("buscando");
-
-      for (Funcionario funcionario : repository.findAll()) {
-        items.add(new FuncionarioDTO(funcionario));
-      }
-
-      if (items.isEmpty())
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-
-      return new ResponseEntity<>(items, HttpStatus.OK);
-    } catch (Exception e) {
-      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-  }
 }

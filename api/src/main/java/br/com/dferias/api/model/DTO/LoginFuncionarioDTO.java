@@ -13,5 +13,6 @@ import lombok.Setter;
 public class LoginFuncionarioDTO {
 
     private String token;
+    private boolean isLider;
     private Funcionario funcionario;
 }
