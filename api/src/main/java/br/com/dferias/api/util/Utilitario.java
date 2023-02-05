@@ -13,6 +13,7 @@ public class Utilitario {
     public Utilitario() {
         status = new ArrayList<>();
         status.clear();
+
         status.add("APROVADA");
         status.add("VALIDADA");
         status.add("RECUSADA");
