@@ -17,6 +17,8 @@ public interface FeriasRepository extends JpaRepository<Ferias, Long> {
 
     List<Ferias> findByIdLider(Long id);
 
+    List<Ferias> findByIdLiderAndStatus(Long id, String status);
+
     @Query(value = "SELECT * FROM ferias  WHERE inicio > DATE_SUB(NOW(), INTERVAL 1 DAY) ORDER BY inicio ASC;", nativeQuery = true)
     List<Ferias> findAllNextFerias();
 

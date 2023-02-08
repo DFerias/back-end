@@ -76,7 +76,7 @@ public class FeriasService {
       throw new NotFoundException();
     }
 
-    if (new Utilitario().status.contains(status)) {
+    if (isStatusValido(status)) {
       feriasRepository.updateFeriasStatus(status, id);
       return;
     }
@@ -86,5 +86,18 @@ public class FeriasService {
   public List<Ferias> findByIdLider(Long id) {
 
     return feriasRepository.findByIdLider(id);
+  }
+
+  public List<Ferias> findByIdLiderAndStatus(Long id, String status) {
+    if (isStatusValido(status)) {
+
+      return feriasRepository.findByIdLiderAndStatus(id, status);
+    }
+
+    throw new NotAcceptableStatusException("Status suportados: APROVADA, VALIDADA, PENDENTE, RECUSADA, CONCLUIDA");
+  }
+
+  public boolean isStatusValido(String status) {
+    return new Utilitario().status.contains(status.trim().toUpperCase());
   }
 }
