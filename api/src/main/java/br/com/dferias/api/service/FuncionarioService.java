@@ -53,7 +53,7 @@ public class FuncionarioService {
   private Funcionario cadastrar(Funcionario funcionario) {
     Funcionario funcionarioCriado;
     funcionarioCriado = repository.save(funcionario);
-    System.out.println("Funcionario criado" + funcionarioCriado);
+
     perfilService.vincularNovoPerfil(funcionarioCriado.getId());
 
     return funcionarioCriado;

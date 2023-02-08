@@ -12,12 +12,11 @@ public class PerfilService {
   private FuncionarioPerfisRepository repository;
 
   public void vincularNovoPerfil(Long idNovoFuncionario) {
-    System.out.println("Salvando " + idNovoFuncionario);
+
     FuncionarioPerfis vinculo = new FuncionarioPerfis(
-      Integer.parseInt(idNovoFuncionario.toString()),
-      1
-    );
-    System.out.println(vinculo);
+        Integer.parseInt(idNovoFuncionario.toString()),
+        1);
+
     repository.save(vinculo);
   }
 }

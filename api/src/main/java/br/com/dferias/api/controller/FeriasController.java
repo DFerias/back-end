@@ -23,6 +23,7 @@ import br.com.dferias.api.model.DTO.TokenDTO;
 import br.com.dferias.api.service.AuthenticationService;
 import br.com.dferias.api.service.FeriasService;
 import br.com.dferias.api.service.FuncionarioService;
+import io.micrometer.common.lang.Nullable;
 
 @RequestMapping("/api")
 @Controller
@@ -60,12 +61,12 @@ public class FeriasController {
 
       for (Ferias ferias : feriasList) {
         Funcionario funcionario = funcionarioService.getById(ferias.getIdFuncionario());
-        System.out.println(funcionario.getNome());
+
         feriasFuncionario.add(new FeriasFuncionarioDTO(funcionario, ferias));
       }
       return new ResponseEntity<>(feriasFuncionario, HttpStatus.OK);
     } catch (Exception e) {
-      System.out.println(e);
+
       return new ResponseEntity<>(feriasFuncionario, HttpStatus.NOT_FOUND);
     }
   }
@@ -118,14 +119,45 @@ public class FeriasController {
     }
   }
 
-  @GetMapping("/ferias/lider")
+  @GetMapping("/ferias/lider/")
   public ResponseEntity<List<FeriasFuncionarioDTO>> getByLider(@RequestHeader String authorization) {
+
     List<Ferias> feriasList = new ArrayList<>();
     List<FeriasFuncionarioDTO> feriasFuncionario = new ArrayList<>();
     try {
       authorization = authorization.replaceAll("Bearer ", "");
       Long id = authService.getIdByToken(new TokenDTO("Bearer", authorization));
       feriasList = feriasService.findByIdLider(id);
+
+      if (feriasList.isEmpty()) {
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+      }
+
+      for (Ferias ferias : feriasList) {
+        Funcionario funcionario = funcionarioService.getById(ferias.getIdFuncionario());
+
+        feriasFuncionario.add(new FeriasFuncionarioDTO(funcionario, ferias));
+      }
+      return new ResponseEntity<>(feriasFuncionario, HttpStatus.OK);
+    } catch (Exception e) {
+
+      return new ResponseEntity<>(feriasFuncionario, HttpStatus.NOT_FOUND);
+    }
+  }
+
+  @GetMapping("/ferias/lider/{status}")
+  public ResponseEntity<List<FeriasFuncionarioDTO>> getByLiderAndStatus(@RequestHeader String authorization,
+      @PathVariable String status) {
+
+    if (status == null) {
+      status = "todos";
+    }
+    List<Ferias> feriasList = new ArrayList<>();
+    List<FeriasFuncionarioDTO> feriasFuncionario = new ArrayList<>();
+    try {
+      authorization = authorization.replaceAll("Bearer ", "");
+      Long id = authService.getIdByToken(new TokenDTO("Bearer", authorization));
+      feriasList = feriasService.findByIdLiderAndStatus(id, status);
 
       if (feriasList.isEmpty()) {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
