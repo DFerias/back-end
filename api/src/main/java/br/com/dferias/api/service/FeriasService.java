@@ -1,19 +1,27 @@
 package br.com.dferias.api.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+
+import javax.naming.directory.InvalidAttributesException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import org.springframework.web.server.NotAcceptableStatusException;
 
 import br.com.dferias.api.model.Ferias;
 import br.com.dferias.api.model.Funcionario;
 import br.com.dferias.api.repository.FeriasRepository;
 import br.com.dferias.api.util.Utilitario;
+import br.com.dferias.api.util.Validador;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 public class FeriasService {
 
   @Autowired
@@ -21,14 +29,6 @@ public class FeriasService {
 
   @Autowired
   private FuncionarioService funcionarioService;
-
-  public Ferias save(Ferias ferias) {
-    ferias.setStatus("PENDENTE");
-    Funcionario funcionario = funcionarioService.getById(
-        ferias.getIdFuncionario());
-    ferias.setIdLider(funcionarioService.getLiderId(funcionario));
-    return feriasRepository.save(ferias);
-  }
 
   public List<Ferias> findAll() {
     return feriasRepository.findAll();
@@ -100,4 +100,36 @@ public class FeriasService {
   public boolean isStatusValido(String status) {
     return new Utilitario().status.contains(status.trim().toUpperCase());
   }
+
+  public Ferias save(Ferias ferias) throws InvalidAttributesException {
+    ferias.setStatus("PENDENTE");
+    Funcionario funcionario = funcionarioService.getById(
+        ferias.getIdFuncionario());
+    ferias.setIdLider(funcionarioService.getLiderId(funcionario));
+    if (isFeriasValida(ferias)) {
+      // return feriasRepository.save(ferias);
+    }
+    return null;
+
+  }
+
+  private boolean isFeriasValida(Ferias ferias) {
+    Date inicio = ferias.getInicio();
+    Date fim = ferias.getFim();
+
+    Calendar calendar = Calendar.getInstance();
+
+    Assert.isTrue(inicio.before(fim), "A primeira data deve ser anterior à segunda data");
+
+    // nao inicia na sexta
+    calendar.setTime(inicio);
+
+    Assert.isTrue(calendar.get(Calendar.DAY_OF_WEEK) != Calendar.FRIDAY - 1,
+        "As ferias nao podem ser iniciadas na sexta feira");
+
+    // Assert.isTrue(Validador.isFeriadoNacional(inicio), null);
+    return true;
+
+  }
+
 }
