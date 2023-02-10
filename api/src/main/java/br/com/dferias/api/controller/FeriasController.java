@@ -38,12 +38,12 @@ public class FeriasController {
   private FuncionarioService funcionarioService;
 
   @PostMapping("/ferias")
-  public ResponseEntity<Ferias> create(@RequestBody Ferias ferias) {
+  public Object create(@RequestBody Ferias ferias) {
     try {
       Ferias savedItem = feriasService.save(ferias);
       return new ResponseEntity<>(savedItem, HttpStatus.CREATED);
     } catch (Exception e) {
-      return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"erro\":\"" + e.getMessage() + "\"}");
     }
   }
 
