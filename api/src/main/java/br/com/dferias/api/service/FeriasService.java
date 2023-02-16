@@ -30,6 +30,9 @@ public class FeriasService {
   @Autowired
   private FuncionarioService funcionarioService;
 
+  @Autowired
+  private Validador validador;
+
   public List<Ferias> findAll() {
     return feriasRepository.findAll();
   }
@@ -113,21 +116,39 @@ public class FeriasService {
 
   }
 
+  private int getQuantidadePeriodosSolicitados(Long idFuncionario) {
+    int quantidade = 0;
+    for (Ferias ferias : findByIdFuncionario(idFuncionario)) {
+      if (!ferias.getStatus().equals("RECUSADA") && !ferias.getStatus().equals("CONCLUIDA")) {
+        System.out.println(ferias.getStatus());
+        quantidade++;
+      }
+    }
+    return quantidade;
+
+  }
+
   private boolean isFeriasValida(Ferias ferias) {
+    Calendar calendar = Calendar.getInstance();
+
     Date inicio = ferias.getInicio();
     Date fim = ferias.getFim();
-
-    Calendar calendar = Calendar.getInstance();
+    int quantidade = validador.getDiferencaEntreDatas(inicio, fim);
 
     Assert.isTrue(inicio.before(fim), "A primeira data deve ser anterior à segunda data");
 
+    Assert.isTrue(quantidade >= 5, "As ferias nao podem ser inferiores à cinco dias");
     // nao inicia na sexta
     calendar.setTime(inicio);
+    Assert.isTrue(validador.isQuantidadeFeriasValido(ferias.getIdFuncionario(), quantidade),
+        "O funcionario nao tem saldo de ferias suficiente");
 
     Assert.isTrue(calendar.get(Calendar.DAY_OF_WEEK) != Calendar.FRIDAY - 1,
         "As ferias nao podem ser iniciadas na sexta feira");
-
-    // Assert.isTrue(Validador.isFeriadoNacional(inicio), null);
+    Assert.isTrue(!Validador.isFeriadoNacional(inicio), "As ferias nao podem ser iniciadas em um feriado");
+    Assert.isTrue(
+        getQuantidadePeriodosSolicitados(ferias.getIdFuncionario()) <= 3,
+        "O funcionario ja tem 3 periodos solicitados");
     return true;
 
   }
