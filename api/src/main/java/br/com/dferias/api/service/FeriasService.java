@@ -110,7 +110,7 @@ public class FeriasService {
         ferias.getIdFuncionario());
     ferias.setIdLider(funcionarioService.getLiderId(funcionario));
     if (isFeriasValida(ferias)) {
-      // return feriasRepository.save(ferias);
+      return feriasRepository.save(ferias);
     }
     return null;
 
