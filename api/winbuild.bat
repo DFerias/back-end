@@ -1,1 +1,1 @@
-mvnw.cmd package -f pom.xml & echo Build completo & copy .\target\api-0.0.1-SNAPSHOT.jar .\..\ 
+mvnw.cmd package -f pom.xml & echo Build completo & copy .\target\api-0.0.1-SNAPSHOT.jar .\..\ & mkdir .\..\config & copy .\config\application.properties .\..\config\application.properties
