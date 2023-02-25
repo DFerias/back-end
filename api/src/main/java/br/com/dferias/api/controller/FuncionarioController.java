@@ -29,11 +29,27 @@ public class FuncionarioController {
   @Autowired
   private FuncionarioService funcionarioService;
 
+  @GetMapping("/users")
+  public ResponseEntity<List<Funcionario>> getAll() {
+    try {
+      List<Funcionario> items = new ArrayList<Funcionario>();
+
+      repository.findAll().forEach(items::add);
+
+      if (items.isEmpty())
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+      return new ResponseEntity<>(items, HttpStatus.OK);
+    } catch (Exception e) {
+      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
   @GetMapping("/user/{id}")
   public ResponseEntity<Funcionario> getAll(@PathVariable Long id) {
 
     try {
-      List<Funcionario> items = new ArrayList<Funcionario>();
+
       Funcionario funcionario = repository.findById(id).get();
 
       return new ResponseEntity<>(funcionario, HttpStatus.OK);

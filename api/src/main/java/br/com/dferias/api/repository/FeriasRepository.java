@@ -27,4 +27,14 @@ public interface FeriasRepository extends JpaRepository<Ferias, Long> {
     @Query(value = "update Ferias f set f.status = ?1 where f.id = ?2", nativeQuery = false)
     void updateFeriasStatus(String status, Long id);
 
+    @Modifying
+    @Transactional
+    @Query(value = "update Ferias f set f.observacoes_lider = ?2 where f.id = ?1", nativeQuery = false)
+    void updateLiderComentario(Long idFerias, String comentario);
+
+    @Modifying
+    @Transactional
+    @Query(value = "update Ferias f set f.observacoes_rh = ?2 where f.id = ?1", nativeQuery = false)
+    void updateRHComentario(Long idFerias, String comentario);
+
 }

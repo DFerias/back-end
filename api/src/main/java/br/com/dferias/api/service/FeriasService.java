@@ -138,7 +138,7 @@ public class FeriasService {
     Assert.isTrue(inicio.before(fim), "A primeira data deve ser anterior à segunda data");
 
     Assert.isTrue(quantidade >= 5, "As ferias nao podem ser inferiores à cinco dias");
-    // nao inicia na sexta
+
     calendar.setTime(inicio);
     Assert.isTrue(validador.isQuantidadeFeriasValido(ferias.getIdFuncionario(), quantidade),
         "O funcionario nao tem saldo de ferias suficiente");
@@ -151,6 +151,22 @@ public class FeriasService {
         "O funcionario ja tem 3 periodos solicitados");
     return true;
 
+  }
+
+  public void adicionarComentarioLider(Long idFerias, String comentario) throws NotFoundException {
+
+    if (feriasRepository.findById(idFerias).isEmpty()) {
+      throw new NotFoundException();
+    }
+    feriasRepository.updateLiderComentario(idFerias, comentario);
+  }
+
+  public void adicionarComentarioRh(Long idFerias, String comentario) throws NotFoundException {
+
+    if (feriasRepository.findById(idFerias).isEmpty()) {
+      throw new NotFoundException();
+    }
+    feriasRepository.updateRHComentario(idFerias, comentario);
   }
 
 }
