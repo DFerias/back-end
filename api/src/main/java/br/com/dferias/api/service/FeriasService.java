@@ -150,7 +150,7 @@ public class FeriasService {
     Assert.isTrue(validador.isQuantidadeFeriasValido(ferias.getIdFuncionario(), quantidade),
         "O funcionario nao tem saldo de ferias suficiente");
 
-    Assert.isTrue(calendar.get(Calendar.DAY_OF_WEEK) != Calendar.FRIDAY - 1,
+    Assert.isTrue(calendar.get(Calendar.DAY_OF_WEEK) != Calendar.FRIDAY,
         "As ferias nao podem ser iniciadas na sexta feira");
     Assert.isTrue(!Validador.isFeriadoNacional(inicio), "As ferias nao podem ser iniciadas em um feriado");
 

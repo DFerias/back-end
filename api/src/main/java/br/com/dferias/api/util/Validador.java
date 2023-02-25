@@ -31,8 +31,8 @@ public class Validador {
     public static boolean isFeriadoNacional(Date data) {
         Calendar calendario = Calendar.getInstance();
         calendario.setTime(data);
-        int mes = calendario.get(Calendar.MONTH) + 1;
-        int dia = calendario.get(Calendar.DAY_OF_MONTH) + 1;
+        int mes = calendario.get(Calendar.MONTH);
+        int dia = calendario.get(Calendar.DAY_OF_MONTH);
 
         return (mes == Calendar.JANUARY && dia == 1) ||
                 (mes == Calendar.APRIL && dia == 21) ||
