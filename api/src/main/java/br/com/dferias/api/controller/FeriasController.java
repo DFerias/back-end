@@ -119,7 +119,7 @@ public class FeriasController {
     }
   }
 
-  @GetMapping("/ferias/lider/")
+  @GetMapping("/ferias/lider")
   public ResponseEntity<List<FeriasFuncionarioDTO>> getByLider(@RequestHeader String authorization) {
 
     List<Ferias> feriasList = new ArrayList<>();
