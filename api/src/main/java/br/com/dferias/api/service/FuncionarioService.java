@@ -10,10 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.dferias.api.model.Equipe;
+import br.com.dferias.api.model.Ferias;
 import br.com.dferias.api.model.Funcionario;
 import br.com.dferias.api.model.DTO.FuncionarioDTO;
 import br.com.dferias.api.repository.EquipeRepository;
 import br.com.dferias.api.repository.FuncionarioRepository;
+import br.com.dferias.api.util.Validador;
 
 @Service
 public class FuncionarioService {
@@ -77,5 +79,11 @@ public class FuncionarioService {
     }
     return false;
 
+  }
+
+  public void diminuirSaldo(Ferias ferias) {
+    Integer quantidade = new Validador().getDiferencaEntreDatas(ferias.getInicio(), ferias.getFim());
+
+    repository.diminuirSaldoFerias(quantidade, ferias.getIdFuncionario());
   }
 }

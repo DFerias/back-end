@@ -1,8 +1,9 @@
 package br.com.dferias.api.service;
 
+import java.sql.Date;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import javax.naming.directory.InvalidAttributesException;
@@ -104,12 +105,18 @@ public class FeriasService {
     return new Utilitario().status.contains(status.trim().toUpperCase());
   }
 
-  public Ferias save(Ferias ferias) throws InvalidAttributesException {
+  public Ferias save(Ferias ferias) throws InvalidAttributesException, ParseException {
     ferias.setStatus("PENDENTE");
     Funcionario funcionario = funcionarioService.getById(
         ferias.getIdFuncionario());
     ferias.setIdLider(funcionarioService.getLiderId(funcionario));
+
+    ferias.setInicio(Utilitario.arrumarData(ferias.getInicio()));
+    ferias.setFim(Utilitario.arrumarData(ferias.getFim()));
+
     if (isFeriasValida(ferias)) {
+
+      funcionarioService.diminuirSaldo(ferias);
       return feriasRepository.save(ferias);
     }
     return null;
@@ -120,7 +127,6 @@ public class FeriasService {
     int quantidade = 0;
     for (Ferias ferias : findByIdFuncionario(idFuncionario)) {
       if (!ferias.getStatus().equals("RECUSADA") && !ferias.getStatus().equals("CONCLUIDA")) {
-        System.out.println(ferias.getStatus());
         quantidade++;
       }
     }
@@ -134,23 +140,60 @@ public class FeriasService {
     Date inicio = ferias.getInicio();
     Date fim = ferias.getFim();
     int quantidade = validador.getDiferencaEntreDatas(inicio, fim);
+    Funcionario funcionario = funcionarioService.getById(ferias.getIdFuncionario());
 
     Assert.isTrue(inicio.before(fim), "A primeira data deve ser anterior à segunda data");
 
     Assert.isTrue(quantidade >= 5, "As ferias nao podem ser inferiores à cinco dias");
-    // nao inicia na sexta
+
     calendar.setTime(inicio);
     Assert.isTrue(validador.isQuantidadeFeriasValido(ferias.getIdFuncionario(), quantidade),
         "O funcionario nao tem saldo de ferias suficiente");
 
-    Assert.isTrue(calendar.get(Calendar.DAY_OF_WEEK) != Calendar.FRIDAY - 1,
+    Assert.isTrue(calendar.get(Calendar.DAY_OF_WEEK) != Calendar.FRIDAY,
         "As ferias nao podem ser iniciadas na sexta feira");
     Assert.isTrue(!Validador.isFeriadoNacional(inicio), "As ferias nao podem ser iniciadas em um feriado");
+
+    boolean isFeriadoMunicipal = true;
+
+    Integer dia = inicio.getDate();
+    Integer mes = inicio.getMonth() + 1;
+    try {
+
+      feriasRepository.validarFeriadoMunicipal(funcionario.getCidade(), funcionario.getUf(),
+          dia.toString(),
+          mes.toString()).get(0);
+
+    } catch (Exception e) {
+
+      isFeriadoMunicipal = false;
+    }
+
+    Assert.isTrue(
+        !isFeriadoMunicipal,
+        dia + "/" + mes + "  é um feriado municipal na cidade onde o funcionario esta alocado");
+
     Assert.isTrue(
         getQuantidadePeriodosSolicitados(ferias.getIdFuncionario()) <= 3,
         "O funcionario ja tem 3 periodos solicitados");
     return true;
 
+  }
+
+  public void adicionarComentarioLider(Long idFerias, String comentario) throws NotFoundException {
+
+    if (feriasRepository.findById(idFerias).isEmpty()) {
+      throw new NotFoundException();
+    }
+    feriasRepository.updateLiderComentario(idFerias, comentario);
+  }
+
+  public void adicionarComentarioRh(Long idFerias, String comentario) throws NotFoundException {
+
+    if (feriasRepository.findById(idFerias).isEmpty()) {
+      throw new NotFoundException();
+    }
+    feriasRepository.updateRHComentario(idFerias, comentario);
   }
 
 }
