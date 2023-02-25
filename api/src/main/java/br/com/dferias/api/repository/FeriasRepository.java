@@ -1,6 +1,7 @@
 package br.com.dferias.api.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -37,4 +38,6 @@ public interface FeriasRepository extends JpaRepository<Ferias, Long> {
     @Query(value = "update Ferias f set f.observacoes_rh = ?2 where f.id = ?1", nativeQuery = false)
     void updateRHComentario(Long idFerias, String comentario);
 
+    @Query(value = "SELECT f.id FROM cidade c join feriado_municipal f on f.cidade_id = c.id and c.nome = ?1 and c.estado =?2  and f.dia= ?3 and f.mes =?4 limit 1", nativeQuery = true)
+    List<Object> validarFeriadoMunicipal(String cidade, String uf, String dia, String mes);
 }

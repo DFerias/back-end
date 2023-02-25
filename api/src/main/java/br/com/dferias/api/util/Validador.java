@@ -24,14 +24,14 @@ public class Validador {
     public boolean isQuantidadeFeriasValido(Long id, Integer quantidade) {
 
         Funcionario funcionario = funcionarioService.findById(id).get();
-        return funcionario.getSaldoFerias() >= quantidade;
+        return funcionario.getSaldo_ferias() >= quantidade;
 
     }
 
     public static boolean isFeriadoNacional(Date data) {
         Calendar calendario = Calendar.getInstance();
         calendario.setTime(data);
-        int mes = calendario.get(Calendar.MONTH);
+        int mes = calendario.get(Calendar.MONTH) + 1;
         int dia = calendario.get(Calendar.DAY_OF_MONTH) + 1;
 
         return (mes == Calendar.JANUARY && dia == 1) ||

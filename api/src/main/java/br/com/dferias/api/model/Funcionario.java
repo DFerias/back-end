@@ -35,7 +35,7 @@ public class Funcionario implements UserDetails {
         this.nome = funcionarioDTO.getNome();
         this.dataAdmissao = funcionarioDTO.getDataAdmissao();
         this.email = funcionarioDTO.getEmail();
-        this.saldoFerias = 0;
+        this.saldo_ferias = 0;
         this.pass = new BCryptPasswordEncoder().encode(funcionarioDTO.getPass());
         this.modalidade = funcionarioDTO.getModalidade();
         this.cidade = funcionarioDTO.getCidade();
@@ -61,7 +61,7 @@ public class Funcionario implements UserDetails {
                 getEmail() +
                 "'" +
                 ", saldoFerias='" +
-                getSaldoFerias() +
+                getSaldo_ferias() +
                 "'" +
                 ", pass='" +
                 getPass() +
@@ -89,7 +89,7 @@ public class Funcionario implements UserDetails {
     private String nome;
     private Date dataAdmissao;
     private String email;
-    private int saldoFerias;
+    private int saldo_ferias;
     private String pass;
     private String modalidade;
     private String cidade;
