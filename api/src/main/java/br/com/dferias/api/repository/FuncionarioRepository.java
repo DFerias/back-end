@@ -24,6 +24,6 @@ public interface FuncionarioRepository extends JpaRepository<Funcionario, Long> 
   @Modifying
   @Transactional
   @Query(value = "update Funcionario f set f.saldo_ferias = f.saldo_ferias +  ?1 where f.id = ?2", nativeQuery = false)
-  void aumentarSaldoFerias(Integer quantidade, Long id);
+  void devolverSaldoFerias(Integer quantidade, Long id);
 
 }

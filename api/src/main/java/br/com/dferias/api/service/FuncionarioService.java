@@ -86,4 +86,11 @@ public class FuncionarioService {
 
     repository.diminuirSaldoFerias(quantidade, ferias.getIdFuncionario());
   }
+
+  public void devolverSaldo(Ferias ferias) {
+    Integer quantidade = new Validador().getDiferencaEntreDatas(ferias.getInicio(), ferias.getFim());
+
+    repository.devolverSaldoFerias(quantidade, ferias.getIdFuncionario());
+  }
+
 }

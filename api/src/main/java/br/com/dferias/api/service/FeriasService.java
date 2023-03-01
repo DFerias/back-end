@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 
 import javax.naming.directory.InvalidAttributesException;
 
@@ -75,12 +76,16 @@ public class FeriasService {
 
   public void atualizarStatus(Long id, String status) throws NotAcceptableStatusException, NotFoundException {
     status = status.toUpperCase().trim();
-
-    if (feriasRepository.findById(id).isEmpty()) {
+    Optional<Ferias> feriasOpt = feriasRepository.findById(id);
+    if (feriasOpt.isEmpty()) {
       throw new NotFoundException();
     }
 
     if (isStatusValido(status)) {
+      Ferias ferias = feriasOpt.get();
+      if (status.toUpperCase().trim().equals("RECUSADA")) {
+        funcionarioService.devolverSaldo(ferias);
+      }
       feriasRepository.updateFeriasStatus(status, id);
       return;
     }
@@ -124,9 +129,10 @@ public class FeriasService {
   }
 
   private int getQuantidadePeriodosSolicitados(Long idFuncionario) {
-    int quantidade = 0;
+    int quantidade = 1;
     for (Ferias ferias : findByIdFuncionario(idFuncionario)) {
       if (!ferias.getStatus().equals("RECUSADA") && !ferias.getStatus().equals("CONCLUIDA")) {
+
         quantidade++;
       }
     }
