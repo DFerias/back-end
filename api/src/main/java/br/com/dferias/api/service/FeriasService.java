@@ -150,7 +150,10 @@ public class FeriasService {
 
     Assert.isTrue(inicio.before(fim), "A primeira data deve ser anterior à segunda data");
 
-    Assert.isTrue(quantidade >= 5, "As ferias nao podem ser inferiores à cinco dias");
+    Assert.isTrue(quantidade >= 5, "As férias nao podem ser inferiores à cinco dias");
+
+    Assert.isTrue((funcionario.getSaldo_ferias() - quantidade) >= 5,
+        "Por favor, informe um período mais curto ou o período completo, já que o período atual deixaria menos de 5 dias restantes.");
 
     calendar.setTime(inicio);
     Assert.isTrue(validador.isQuantidadeFeriasValido(ferias.getIdFuncionario(), quantidade),
@@ -158,7 +161,7 @@ public class FeriasService {
 
     Assert.isTrue(calendar.get(Calendar.DAY_OF_WEEK) != Calendar.FRIDAY,
         "As ferias nao podem ser iniciadas na sexta feira");
-    Assert.isTrue(!Validador.isFeriadoNacional(inicio), "As ferias nao podem ser iniciadas em um feriado");
+    Assert.isTrue(!Validador.isFeriadoNacional(inicio), "As férias nao podem ser iniciadas em um feriado");
 
     boolean isFeriadoMunicipal = true;
 
@@ -177,13 +180,37 @@ public class FeriasService {
 
     Assert.isTrue(
         !isFeriadoMunicipal,
-        dia + "/" + mes + "  é um feriado municipal na cidade onde o funcionario esta alocado");
+        dia + "/" + mes + "  é um feriado municipal na cidade onde o funcionário esta alocado");
 
     Assert.isTrue(
         getQuantidadePeriodosSolicitados(ferias.getIdFuncionario()) <= 3,
-        "O funcionario ja tem 3 periodos solicitados");
-    return true;
+        "O funcionário ja tem 3 periodos solicitados");
 
+    if (getQuantidadePeriodosSolicitados(ferias.getIdFuncionario()) == 2) {
+      Assert.isTrue(funcionario.getSaldo_ferias() == quantidade,
+          "Como o funcionário já tem 2 períodos de férias agendados, o último período deve ter a duração total do saldo de férias restante: "
+              + funcionario.getSaldo_ferias() + " dias ");
+
+    }
+    List<Ferias> listaDeFerias = findByIdFuncionario(ferias.getIdFuncionario());
+    boolean possuiPeriodoGrandeAgendado = false;
+    if (getQuantidadePeriodosSolicitados(ferias.getIdFuncionario()) == 1) {
+      for (Ferias solicitacao : listaDeFerias) {
+        if (!solicitacao.getStatus().equals("RECUSADA") && !solicitacao.getStatus().equals("CONCLUIDA")) {
+          if (validador.getDiferencaEntreDatas(solicitacao.getInicio(), solicitacao.getFim()) >= 14) {
+            possuiPeriodoGrandeAgendado = true;
+          }
+          ;
+        }
+
+      }
+      if (!possuiPeriodoGrandeAgendado && quantidade < 14) {
+
+        Assert.isTrue(funcionario.getSaldo_ferias() - quantidade >= 14,
+            "Um dos periodos deve ter 14 ou mais dias, portanto essa solicitacao forcaria 3 periodos menores que 14");
+      }
+    }
+    return true;
   }
 
   public void adicionarComentarioLider(Long idFerias, String comentario) throws NotFoundException {
