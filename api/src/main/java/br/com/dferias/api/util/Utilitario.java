@@ -29,9 +29,10 @@ public class Utilitario {
     public static Date arrumarData(Date data) throws ParseException {
 
         Calendar cal = Calendar.getInstance();
+
         cal.setTime(data);
 
-        cal.add(Calendar.DATE, 1);
+        // cal.add(Calendar.DATE, 1);
 
         return new Date(cal.getTimeInMillis());
 
