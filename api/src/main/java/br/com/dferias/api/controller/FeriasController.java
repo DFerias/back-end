@@ -28,9 +28,11 @@ import br.com.dferias.api.service.AuthenticationService;
 import br.com.dferias.api.service.FeriasService;
 import br.com.dferias.api.service.FuncionarioService;
 import io.micrometer.common.lang.Nullable;
+import lombok.extern.slf4j.Slf4j;
 
 @RequestMapping("/api")
 @Controller
+@Slf4j
 public class FeriasController {
 
   @Autowired
@@ -43,6 +45,7 @@ public class FeriasController {
 
   @PostMapping("/ferias")
   public Object create(@RequestBody Ferias ferias) {
+    log.warn(ferias.toString());
     try {
       Ferias savedItem = feriasService.save(ferias);
       return new ResponseEntity<>(savedItem, HttpStatus.CREATED);

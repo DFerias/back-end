@@ -162,8 +162,8 @@ public class FeriasService {
     log.info(inicio.toString() + " Inicio");
     log.info(fim.toString() + " fim");
 
-    log.info(calendar.get(Calendar.DAY_OF_WEEK) + " !=" + Calendar.FRIDAY);
-    log.info((calendar.get(Calendar.DAY_OF_WEEK) != Calendar.FRIDAY) + "");
+    log.info(calendar.get(Calendar.DAY_OF_WEEK) + "==" + Calendar.FRIDAY);
+    log.info((calendar.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY) + "");
     Assert.isTrue(calendar.get(Calendar.DAY_OF_WEEK) != Calendar.FRIDAY,
         "As ferias nao podem ser iniciadas na sexta feira");
     Assert.isTrue(!Validador.isFeriadoNacional(inicio), "As férias nao podem ser iniciadas em um feriado");
