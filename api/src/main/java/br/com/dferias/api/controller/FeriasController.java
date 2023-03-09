@@ -27,6 +27,7 @@ import br.com.dferias.api.model.DTO.TokenDTO;
 import br.com.dferias.api.service.AuthenticationService;
 import br.com.dferias.api.service.FeriasService;
 import br.com.dferias.api.service.FuncionarioService;
+import io.micrometer.common.lang.Nullable;
 
 @RequestMapping("/api")
 @Controller
@@ -198,10 +199,18 @@ public class FeriasController {
   }
 
   @PostMapping("/ferias/{id}/{status}")
-  public ResponseEntity<String> update(@PathVariable Long id, @PathVariable String status) {
+  public ResponseEntity<String> update(@PathVariable Long id, @PathVariable String status,
+      @Nullable @RequestBody String comentario) {
     try {
 
       feriasService.atualizarStatus(id, status);
+      ObjectMapper objectMapper = new ObjectMapper();
+      Map<String, Object> jsonMap = objectMapper.readValue(comentario, new TypeReference<Map<String, Object>>() {
+      });
+      comentario = (String) jsonMap.get("comentario");
+
+      feriasService.adicionarComentarioLider(id, comentario);
+
       return new ResponseEntity<>("ok", HttpStatus.OK);
     } catch (NotAcceptableStatusException ex) {
       return new ResponseEntity<>("Status nao suportado\n" + ex.getMessage(), HttpStatus.BAD_REQUEST);

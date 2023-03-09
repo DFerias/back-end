@@ -159,6 +159,11 @@ public class FeriasService {
     Assert.isTrue(validador.isQuantidadeFeriasValido(ferias.getIdFuncionario(), quantidade),
         "O funcionario nao tem saldo de ferias suficiente");
 
+    log.info(inicio.toString() + " Inicio");
+    log.info(fim.toString() + " fim");
+
+    log.info(calendar.get(Calendar.DAY_OF_WEEK) + " !=" + Calendar.FRIDAY);
+    log.info((calendar.get(Calendar.DAY_OF_WEEK) != Calendar.FRIDAY) + "");
     Assert.isTrue(calendar.get(Calendar.DAY_OF_WEEK) != Calendar.FRIDAY,
         "As ferias nao podem ser iniciadas na sexta feira");
     Assert.isTrue(!Validador.isFeriadoNacional(inicio), "As férias nao podem ser iniciadas em um feriado");
@@ -169,6 +174,7 @@ public class FeriasService {
     Integer mes = inicio.getMonth() + 1;
     try {
 
+      log.info(dia + "/" + mes);
       feriasRepository.validarFeriadoMunicipal(funcionario.getCidade(), funcionario.getUf(),
           dia.toString(),
           mes.toString()).get(0);
