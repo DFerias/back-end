@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+    <property name="LOG_TIMEZONE" value="America/Sao_Paulo"/>
+    ...
+
+
+
     <springProperty scope="context" name="logDir" source="logging.file.path"/>
     <springProperty scope="context" name="springAppName" source="spring.application.name"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{dd-MM-yyyy HH:mm:ss} %green([%logger{36}.%M]) %highlight(%-5level): %msg%n</pattern>
+            <pattern>%d{dd-MM-yyyy HH:mm:ss, LOG_TIMEZONE} %green([%logger{36}.%M]) %highlight(%-5level): %msg%n</pattern>
         </encoder>
     </appender>
 
