@@ -116,9 +116,6 @@ public class FeriasService {
         ferias.getIdFuncionario());
     ferias.setIdLider(funcionarioService.getLiderId(funcionario));
 
-    ferias.setInicio(Utilitario.arrumarData(ferias.getInicio()));
-    ferias.setFim(Utilitario.arrumarData(ferias.getFim()));
-
     if (isFeriasValida(ferias)) {
 
       funcionarioService.diminuirSaldo(ferias);
@@ -159,11 +156,6 @@ public class FeriasService {
     Assert.isTrue(validador.isQuantidadeFeriasValido(ferias.getIdFuncionario(), quantidade),
         "O funcionario nao tem saldo de ferias suficiente");
 
-    log.info(inicio.toString() + " Inicio");
-    log.info(fim.toString() + " fim");
-
-    log.info(calendar.get(Calendar.DAY_OF_WEEK) + "==" + Calendar.FRIDAY);
-    log.info((calendar.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY) + "");
     Assert.isTrue(calendar.get(Calendar.DAY_OF_WEEK) != Calendar.FRIDAY,
         "As ferias nao podem ser iniciadas na sexta feira");
     Assert.isTrue(!Validador.isFeriadoNacional(inicio), "As férias nao podem ser iniciadas em um feriado");
@@ -188,11 +180,12 @@ public class FeriasService {
         !isFeriadoMunicipal,
         dia + "/" + mes + "  é um feriado municipal na cidade onde o funcionário esta alocado");
 
+    int quantidadeDePeriodosSolicitados = getQuantidadePeriodosSolicitados(ferias.getIdFuncionario());
     Assert.isTrue(
-        getQuantidadePeriodosSolicitados(ferias.getIdFuncionario()) <= 3,
+        quantidadeDePeriodosSolicitados <= 3,
         "O funcionário ja tem 3 periodos solicitados");
 
-    if (getQuantidadePeriodosSolicitados(ferias.getIdFuncionario()) == 2) {
+    if (quantidadeDePeriodosSolicitados == 2) {
       Assert.isTrue(funcionario.getSaldo_ferias() == quantidade,
           "Como o funcionário já tem 2 períodos de férias agendados, o último período deve ter a duração total do saldo de férias restante: "
               + funcionario.getSaldo_ferias() + " dias ");
@@ -200,7 +193,7 @@ public class FeriasService {
     }
     List<Ferias> listaDeFerias = findByIdFuncionario(ferias.getIdFuncionario());
     boolean possuiPeriodoGrandeAgendado = false;
-    if (getQuantidadePeriodosSolicitados(ferias.getIdFuncionario()) == 1) {
+    if (quantidadeDePeriodosSolicitados == 1) {
       for (Ferias solicitacao : listaDeFerias) {
         if (!solicitacao.getStatus().equals("RECUSADA") && !solicitacao.getStatus().equals("CONCLUIDA")) {
           if (validador.getDiferencaEntreDatas(solicitacao.getInicio(), solicitacao.getFim()) >= 14) {

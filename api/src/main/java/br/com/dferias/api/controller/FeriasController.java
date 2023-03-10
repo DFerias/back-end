@@ -203,17 +203,27 @@ public class FeriasController {
 
   @PostMapping("/ferias/{id}/{status}")
   public ResponseEntity<String> update(@PathVariable Long id, @PathVariable String status,
-      @Nullable @RequestBody String comentario) {
+      @Nullable @RequestBody String requestBody) {
     try {
 
+      log.info(requestBody);
       feriasService.atualizarStatus(id, status);
       ObjectMapper objectMapper = new ObjectMapper();
-      Map<String, Object> jsonMap = objectMapper.readValue(comentario, new TypeReference<Map<String, Object>>() {
+      Map<String, String> jsonMap = objectMapper.readValue(requestBody, new TypeReference<Map<String, String>>() {
       });
-      comentario = (String) jsonMap.get("comentario");
 
-      feriasService.adicionarComentarioLider(id, comentario);
+      String comentarioLider = jsonMap.get("comentarioLider");
+      String comentarioRH = jsonMap.get("comentarioRH");
 
+      if (comentarioLider != null) {
+        log.info(comentarioLider);
+        feriasService.adicionarComentarioLider(id, comentarioLider);
+      }
+
+      if (comentarioRH != null) {
+        log.info(comentarioRH);
+        feriasService.adicionarComentarioRh(id, comentarioRH);
+      }
       return new ResponseEntity<>("ok", HttpStatus.OK);
     } catch (NotAcceptableStatusException ex) {
       return new ResponseEntity<>("Status nao suportado\n" + ex.getMessage(), HttpStatus.BAD_REQUEST);
