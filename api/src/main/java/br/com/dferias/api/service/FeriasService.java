@@ -116,6 +116,9 @@ public class FeriasService {
         ferias.getIdFuncionario());
     ferias.setIdLider(funcionarioService.getLiderId(funcionario));
 
+    ferias.setInicio(Utilitario.arrumarData(ferias.getInicio()));
+    ferias.setFim(Utilitario.arrumarData(ferias.getFim()));
+
     if (isFeriasValida(ferias)) {
 
       funcionarioService.diminuirSaldo(ferias);
