@@ -126,7 +126,7 @@ public class FeriasService {
   }
 
   private int getQuantidadePeriodosSolicitados(Long idFuncionario) {
-    int quantidade = 1;
+    int quantidade = 0;
     for (Ferias ferias : findByIdFuncionario(idFuncionario)) {
       if (!ferias.getStatus().equals("RECUSADA") && !ferias.getStatus().equals("CONCLUIDA")) {
 
@@ -199,7 +199,7 @@ public class FeriasService {
           if (validador.getDiferencaEntreDatas(solicitacao.getInicio(), solicitacao.getFim()) >= 14) {
             possuiPeriodoGrandeAgendado = true;
           }
-          ;
+
         }
 
       }

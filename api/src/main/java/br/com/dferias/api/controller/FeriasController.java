@@ -189,7 +189,7 @@ public class FeriasController {
     try {
 
       feriasList = feriasService.findByIdFuncionario(Long.valueOf(idFuncionario));
-      log.debug("ENDPOINT ferias/IDFUNCIONARIO");
+
       for (Ferias ferias : feriasList) {
         log.info(ferias.toString());
       }
