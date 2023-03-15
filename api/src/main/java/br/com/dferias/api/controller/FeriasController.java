@@ -189,6 +189,10 @@ public class FeriasController {
     try {
 
       feriasList = feriasService.findByIdFuncionario(Long.valueOf(idFuncionario));
+      log.debug("ENDPOINT ferias/IDFUNCIONARIO");
+      for (Ferias ferias : feriasList) {
+        log.info(ferias.toString());
+      }
 
       if (feriasList.isEmpty()) {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
