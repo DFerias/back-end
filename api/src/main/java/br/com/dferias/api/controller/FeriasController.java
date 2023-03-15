@@ -238,44 +238,4 @@ public class FeriasController {
 
   }
 
-  @PostMapping("/ferias/lider/comentario/{idFerias}")
-  public ResponseEntity<String> commentLider(@PathVariable Long idFerias, @RequestBody String comentario) {
-    try {
-      ObjectMapper objectMapper = new ObjectMapper();
-      Map<String, Object> jsonMap = objectMapper.readValue(comentario, new TypeReference<Map<String, Object>>() {
-      });
-      comentario = (String) jsonMap.get("comentario");
-
-      feriasService.adicionarComentarioLider(idFerias, comentario);
-      return new ResponseEntity<>("ok", HttpStatus.OK);
-    } catch (NotFoundException e) {
-      return new ResponseEntity<>("ID " + idFerias + " nao encontrado",
-          HttpStatus.NOT_FOUND);
-    } catch (Exception e) {
-      return new ResponseEntity<>("Erro ao atualizar " + e.getMessage(),
-          HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-  }
-
-  @PostMapping("/ferias/rh/comentario/{idFerias}")
-  public ResponseEntity<String> comment(@PathVariable Long idFerias, @RequestBody String comentario) {
-    try {
-      ObjectMapper objectMapper = new ObjectMapper();
-      Map<String, Object> jsonMap = objectMapper.readValue(comentario, new TypeReference<Map<String, Object>>() {
-      });
-      comentario = (String) jsonMap.get("comentario");
-
-      feriasService.adicionarComentarioRh(idFerias, comentario);
-      return new ResponseEntity<>("ok", HttpStatus.OK);
-    } catch (NotFoundException e) {
-      return new ResponseEntity<>("ID " + idFerias + " nao encontrado",
-          HttpStatus.NOT_FOUND);
-    } catch (Exception e) {
-      return new ResponseEntity<>("Erro ao atualizar " + e.getMessage(),
-          HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-  }
-
 }

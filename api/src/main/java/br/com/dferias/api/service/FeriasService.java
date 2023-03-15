@@ -116,9 +116,6 @@ public class FeriasService {
         ferias.getIdFuncionario());
     ferias.setIdLider(funcionarioService.getLiderId(funcionario));
 
-    ferias.setInicio(Utilitario.arrumarData(ferias.getInicio()));
-    ferias.setFim(Utilitario.arrumarData(ferias.getFim()));
-
     if (isFeriasValida(ferias)) {
 
       funcionarioService.diminuirSaldo(ferias);
@@ -175,7 +172,6 @@ public class FeriasService {
           mes.toString()).get(0);
 
     } catch (Exception e) {
-
       isFeriadoMunicipal = false;
     }
 
@@ -184,6 +180,7 @@ public class FeriasService {
         dia + "/" + mes + "  é um feriado municipal na cidade onde o funcionário esta alocado");
 
     int quantidadeDePeriodosSolicitados = getQuantidadePeriodosSolicitados(ferias.getIdFuncionario());
+
     Assert.isTrue(
         quantidadeDePeriodosSolicitados <= 3,
         "O funcionário ja tem 3 periodos solicitados");
