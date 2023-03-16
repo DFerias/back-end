@@ -1,7 +1,7 @@
 package br.com.dferias.api.controller;
 
-import br.com.dferias.api.model.DTO.FuncionarioDTO;
 import br.com.dferias.api.model.Funcionario;
+import br.com.dferias.api.model.DTO.FuncionarioDTO;
 import br.com.dferias.api.repository.FuncionarioRepository;
 import br.com.dferias.api.service.FuncionarioService;
 import java.util.ArrayList;

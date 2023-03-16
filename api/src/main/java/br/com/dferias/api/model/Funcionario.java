@@ -1,6 +1,5 @@
 package br.com.dferias.api.model;
 
-import br.com.dferias.api.model.DTO.FuncionarioDTO;
 import java.sql.Date;
 import java.util.Collection;
 import java.util.Set;
@@ -18,6 +17,8 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import br.com.dferias.api.model.DTO.FuncionarioDTO;
 
 @Getter
 @Setter

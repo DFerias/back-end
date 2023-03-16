@@ -1,7 +1,6 @@
 package br.com.dferias.api.util;
 
 import java.sql.Date;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;

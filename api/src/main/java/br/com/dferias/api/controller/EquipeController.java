@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.dferias.api.model.Equipe;
 import br.com.dferias.api.model.Funcionario;
-import br.com.dferias.api.model.dto.EquipeLiderDTO;
+import br.com.dferias.api.model.DTO.EquipeLiderDTO;
 import br.com.dferias.api.repository.EquipeRepository;
 import br.com.dferias.api.service.FuncionarioService;
 
