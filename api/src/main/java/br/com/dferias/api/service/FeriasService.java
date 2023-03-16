@@ -146,7 +146,8 @@ public class FeriasService {
 
     Assert.isTrue(quantidade >= 5, "As férias nao podem ser inferiores à cinco dias");
 
-    Assert.isTrue((funcionario.getSaldo_ferias() - quantidade) >= 5,
+    Assert.isTrue(
+        (funcionario.getSaldo_ferias() - quantidade) >= 5 || (funcionario.getSaldo_ferias() - quantidade) == 0,
         "Por favor, informe um período mais curto ou o período completo, já que o período atual deixaria menos de 5 dias restantes.");
 
     calendar.setTime(inicio);
