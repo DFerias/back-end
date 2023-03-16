@@ -2,7 +2,6 @@ package br.com.dferias.api.util;
 
 import java.sql.Date;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -26,7 +25,7 @@ public class Utilitario {
 
     }
 
-    public static Date arrumarData(Date data) throws ParseException {
+    public static Date arrumarData(Date data) {
 
         Calendar cal = Calendar.getInstance();
 

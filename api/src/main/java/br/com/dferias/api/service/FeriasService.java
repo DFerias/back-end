@@ -1,13 +1,10 @@
 package br.com.dferias.api.service;
 
 import java.sql.Date;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
-
-import javax.naming.directory.InvalidAttributesException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
@@ -110,7 +107,7 @@ public class FeriasService {
     return new Utilitario().status.contains(status.trim().toUpperCase());
   }
 
-  public Ferias save(Ferias ferias) throws InvalidAttributesException, ParseException {
+  public Ferias save(Ferias ferias) {
     ferias.setStatus("PENDENTE");
     Funcionario funcionario = funcionarioService.getById(
         ferias.getIdFuncionario());

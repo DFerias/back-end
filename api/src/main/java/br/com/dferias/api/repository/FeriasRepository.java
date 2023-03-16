@@ -1,7 +1,6 @@
 package br.com.dferias.api.repository;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Repository;
 
 import br.com.dferias.api.model.Ferias;
 
-@Repository
 public interface FeriasRepository extends JpaRepository<Ferias, Long> {
     List<Ferias> findByIdFuncionario(Long idFuncionario);
 
