@@ -18,6 +18,7 @@ public class Validador {
     public int getDiferencaEntreDatas(Date startDate, Date endDate) {
         long ms = Math.abs(endDate.getTime() - startDate.getTime());
         long dias = TimeUnit.DAYS.convert(ms, TimeUnit.MILLISECONDS);
+        dias = dias + 1;
         return (int) dias;
     }
 
